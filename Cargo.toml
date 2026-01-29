@@ -1,6 +1,5 @@
-[package]
-name = "simulation"
-version = "0.1.0"
-edition = "2024"
-
-[dependencies]
+[workspace]
+members = [
+  "app",
+  "boid/neural_network"
+]
