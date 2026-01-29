@@ -11,7 +11,7 @@ pub struct Network {
 }
 
 impl Network {
-    pub fn random(rng: &mut dyn RngCore, layers: &[LayerTopology]) -> Result<Self, String> {
+    pub fn random<R: RngCore>(rng: &mut R, layers: &[LayerTopology]) -> Result<Self, String> {
         if layers.len() <= 1 {
             return Err(format!(
                 "Cannot make neural network of {} layers",
@@ -37,7 +37,7 @@ struct Layer {
 }
 
 impl Layer {
-    fn random(rng: &mut dyn RngCore, input_size: usize, output_size: usize) -> Self {
+    fn random<R: RngCore>(rng: &mut R, input_size: usize, output_size: usize) -> Self {
         let neurons = (0..output_size)
             .map(|_| Neuron::random(rng, input_size))
             .collect();
@@ -58,7 +58,7 @@ struct Neuron {
 }
 
 impl Neuron {
-    fn random(rng: &mut dyn RngCore, input_size: usize) -> Self {
+    fn random<R: RngCore>(rng: &mut R, input_size: usize) -> Self {
         let bias = rng.random_range(-1.0..=1.0);
         let weights = (0..input_size)
             .map(|_| rng.random_range(-1.0..=1.0))
