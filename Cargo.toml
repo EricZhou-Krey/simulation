@@ -1,5 +1,6 @@
 [workspace]
 members = [
   "app",
-  "boid/neural_network"
+  "boid/neural_network",
+  "boid/genetic_algorithm",
 ]
