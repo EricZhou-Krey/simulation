@@ -397,4 +397,38 @@ mod tests {
             }
         }
     }
+
+    #[test]
+    fn genetic_algorithm() {
+        fn individual(genes: &[f32]) -> TestIndividual {
+            TestIndividual::create(genes.iter().cloned().collect())
+        }
+        let mut rng = StdRng::seed_from_u64(42);
+
+        let ga = GeneticAlgorithm::new(
+            RouletteWheelSelection,
+            UniformCrossover,
+            GaussianMutation::new(0.5, 0.5).unwrap(),
+        );
+
+        let mut population = vec![
+            individual(&[0.0, 0.0, 0.0]),
+            individual(&[1.0, 1.0, 1.0]),
+            individual(&[1.0, 2.0, 1.0]),
+            individual(&[1.0, 2.0, 4.0]),
+        ];
+
+        for _ in 0..10 {
+            population = ga.evolve(&mut rng, &population).unwrap();
+        }
+
+        let expected_population = vec![
+            individual(&[0.7756009, 1.9743584, 6.0651274]),
+            individual(&[0.6305814, 1.7004122, 5.9225903]),
+            individual(&[0.5763796, 2.01517, 6.0651274]),
+            individual(&[0.9770553, 1.6799709, 5.9429693]),
+        ];
+
+        assert_eq!(population, expected_population);
+    }
 }
