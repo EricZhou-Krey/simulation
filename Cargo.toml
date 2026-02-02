@@ -3,4 +3,5 @@ members = [
   "app/simulation-wasm",
   "boid/neural-network",
   "boid/genetic-algorithm",
+  "boid/simulation"
 ]
