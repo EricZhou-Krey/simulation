@@ -30,6 +30,10 @@ impl Simulation {
             world: World::random(rng),
         }
     }
+
+    pub fn world(&self) -> &World {
+        &self.world
+    }
 }
 
 impl World {
@@ -39,6 +43,14 @@ impl World {
         let foods = (0..60).map(|_| Food::random(rng)).collect();
 
         Self { animals, foods }
+    }
+
+    pub fn animals(&self) -> &Vec<Animal> {
+        &self.animals
+    }
+
+    pub fn foods(&self) -> &Vec<Food> {
+        &self.foods
     }
 }
 
@@ -50,6 +62,14 @@ impl Animal {
             speed: 0.002,
         }
     }
+
+    pub fn position(&self) -> na::Point2<f32> {
+        self.position
+    }
+
+    pub fn rotation(&self) -> na::Rotation2<f32> {
+        self.rotation
+    }
 }
 
 impl Food {
@@ -57,5 +77,9 @@ impl Food {
         Self {
             position: rng.random(),
         }
+    }
+
+    pub fn position(&self) -> na::Point2<f32> {
+        self.position
     }
 }

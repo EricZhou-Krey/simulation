@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/rustwasm/create-wasm-app#readme",
   "devDependencies": {
-    "app-simulation-wasm": "file:../app/simulation-wasm/pkg",
+    "lib-simulation-wasm": "file:../app/simulation-wasm/pkg",
     "copy-webpack-plugin": "^5.0.0",
     "hello-wasm-pack": "^0.1.0",
     "webpack": "^5.104.1",
