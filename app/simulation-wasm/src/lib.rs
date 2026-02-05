@@ -17,4 +17,39 @@ impl Simulation {
 
         Self { rng, sim }
     }
+
+    pub fn world(&self) -> World {
+        World::from(self.sim.world())
+    }
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Debug)]
+pub struct World {
+    #[wasm_bindgen(getter_with_clone)]
+    pub animals: Vec<Animal>,
+}
+
+#[wasm_bindgen]
+#[derive(Clone, Debug)]
+pub struct Animal {
+    pub x: f32,
+    pub y: f32,
+}
+
+impl From<&sim::World> for World {
+    fn from(world: &sim::World) -> Self {
+        let animals = world.animals().iter().map(Animal::from).collect();
+
+        Self { animals }
+    }
+}
+
+impl From<&sim::Animal> for Animal {
+    fn from(animal: &sim::Animal) -> Self {
+        Self {
+            x: animal.position().x,
+            y: animal.position().y,
+        }
+    }
 }
