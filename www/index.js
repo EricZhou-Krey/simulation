@@ -12,6 +12,24 @@ const ctxt = viewport.getContext("2d");
 
 ctxt.fillStyle = "rgb(0, 0, 0)";
 
+CanvasRenderingContext2D.prototype.drawTriangle =
+    function (x, y, size) {
+        this.beginPath();
+        this.moveTo(x, y);
+        this.lineTo(x + size, y + size);
+        this.lineTo(x - size, y + size);
+        this.lineTo(x, y);
+
+        this.fillStyle = 'rgb(0, 0, 0)';
+        this.fill();
+    };
+
+ctxt.drawTriangle(50, 0, 50);
+
 for (const animal of simulation.world().animals) {
-    ctxt.fillRect(animal.x * viewport.width, animal.y * viewport.height, 15, 15);
+    ctxt.drawTriangle(
+        animal.x * viewportWidth,
+        animal.y * viewportHeight,
+        0.01 * viewportWidth,
+    );
 }
