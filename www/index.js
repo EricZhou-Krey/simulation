@@ -1,4 +1,4 @@
-import * as sim from "lib-simulation-wasm";
+import * as sim from "../app/simulation-wasm/pkg/";
 
 const simulation = new sim.Simulation();
 const world = simulation.world();
@@ -26,7 +26,7 @@ CanvasRenderingContext2D.prototype.drawTriangle =
 
 ctxt.drawTriangle(50, 0, 50);
 
-for (const animal of simulation.world().animals) {
+for (const animal of world.animals) {
     ctxt.drawTriangle(
         animal.x * viewportWidth,
         animal.y * viewportHeight,
