@@ -13,10 +13,10 @@ const ctxt = viewport.getContext("2d");
 ctxt.fillStyle = "rgb(0, 0, 0)";
 
 CanvasRenderingContext2D.prototype.drawTriangle =
-    function (x, y, size) {
+    function (x, y, size, rotation) {
         this.beginPath();
-        this.moveTo(x, y);
-        this.lineTo(x + size, y + size);
+        this.moveTo(x - Math.sin(rotation) * size, y + Math.cos(rotation) * size);
+        this.lineTo(x - Math.sin(rotation + 2.0 / 3.0 * Math.PI) * size, y + Math.cos(rotation + 2.0 / 3.0 * Math.PI) * size);
         this.lineTo(x - size, y + size);
         this.lineTo(x, y);
 
@@ -24,12 +24,11 @@ CanvasRenderingContext2D.prototype.drawTriangle =
         this.fill();
     };
 
-ctxt.drawTriangle(50, 0, 50);
-
 for (const animal of world.animals) {
     ctxt.drawTriangle(
-        animal.x * viewportWidth,
-        animal.y * viewportHeight,
-        0.01 * viewportWidth,
+        animal.x * viewport.width,
+        animal.y * viewport.height,
+        0.01 * viewport.width,
+        animal.rotation
     );
 }
