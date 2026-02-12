@@ -9,6 +9,7 @@ pub struct Simulation {
 }
 
 #[wasm_bindgen]
+#[allow(clippy::new_without_default)]
 impl Simulation {
     #[wasm_bindgen(constructor)]
     pub fn new() -> Self {
@@ -23,7 +24,7 @@ impl Simulation {
     }
 
     pub fn step(&mut self) {
-        self.sim.step();
+        self.sim.step(&mut self.rng);
     }
 }
 
