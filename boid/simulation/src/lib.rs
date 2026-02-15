@@ -6,4 +6,5 @@ mod world;
 
 pub use self::{animal::*, eye::*, food::*, simulation::*, world::*};
 use nalgebra as na;
+use neural_network as nn;
 use rand::{Rng, RngCore};

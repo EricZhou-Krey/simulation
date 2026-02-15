@@ -5,6 +5,12 @@ pub struct Simulation {
     world: World,
 }
 
+use std::f32::consts::FRAC_PI_2;
+const SPEED_MIN: f32 = 0.001;
+const SPEED_MAX: f32 = 0.005;
+const SPEED_ACCEL: f32 = 0.2;
+const ROTATION_ACCEL: f32 = FRAC_PI_2;
+
 impl Simulation {
     pub fn random<R: RngCore>(rng: &mut R) -> Self {
         Self {
@@ -18,6 +24,7 @@ impl Simulation {
 
     pub fn step<R: RngCore>(&mut self, rng: &mut R) {
         self.process_collisions(rng);
+        self.process_brain();
         self.process_movements();
     }
 
@@ -30,6 +37,23 @@ impl Simulation {
                     food.position = rng.random();
                 }
             }
+        }
+    }
+
+    fn process_brain(&mut self) {
+        for animal in &mut self.world.animals {
+            let vision =
+                animal
+                    .eye
+                    .process_vision(animal.position, animal.rotation, &self.world.foods);
+
+            let response = animal.brain.propagate(vision).unwrap();
+
+            let speed = response[0].clamp(-SPEED_ACCEL, SPEED_ACCEL);
+            let rotation = response[1].clamp(-ROTATION_ACCEL, ROTATION_ACCEL);
+
+            animal.speed = (animal.speed + speed).clamp(SPEED_MIN, SPEED_MAX);
+            animal.rotation = na::Rotation2::new(animal.rotation.angle() + rotation);
         }
     }
 
