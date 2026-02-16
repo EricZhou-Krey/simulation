@@ -13,6 +13,7 @@ pub struct GeneticAlgorithm<S, C, M> {
     crossover_method: C,
     mutation_method: M,
 }
+
 impl<S: SelectionMethod, C: CrossoverMethod, M: MutationMethod> GeneticAlgorithm<S, C, M> {
     pub fn new(selection_method: S, crossover_method: C, mutation_method: M) -> Self {
         Self {
@@ -63,6 +64,7 @@ pub trait SelectionMethod {
     ) -> Result<&'a I, String>;
 }
 
+#[derive(Debug)]
 pub struct RouletteWheelSelection;
 impl SelectionMethod for RouletteWheelSelection {
     fn select<'a, I: Individual, R: RngCore>(

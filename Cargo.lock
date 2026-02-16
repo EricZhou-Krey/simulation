@@ -21,6 +21,7 @@ checksum = "c08606f8c3cbf4ce6ec8e28fb0014a2c086708fe954eaa885384a6165172e7e8"
 name = "boid-simulation"
 version = "0.1.0"
 dependencies = [
+ "genetic-algorithm",
  "nalgebra",
  "neural-network",
  "rand",
@@ -46,7 +47,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801"
 
 [[package]]
-name = "genetic_algorithm"
+name = "genetic-algorithm"
 version = "0.1.0"
 dependencies = [
  "approx",
