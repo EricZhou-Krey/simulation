@@ -31,7 +31,7 @@ impl Simulation {
         &self.world
     }
 
-    pub fn step<R: RngCore>(&mut self, rng: &mut R) {
+    pub fn step<R: RngCore>(&mut self, rng: &mut R) -> bool {
         self.process_collisions(rng);
         self.process_brain();
         self.process_movements();
@@ -39,6 +39,17 @@ impl Simulation {
         self.age += 1;
         if self.age > GENERATION_LENGTH {
             self.evolve(rng);
+            true
+        } else {
+            false
+        }
+    }
+
+    pub fn train<R: RngCore>(&mut self, rng: &mut R) {
+        loop {
+            if self.step(rng) {
+                return;
+            }
         }
     }
 
