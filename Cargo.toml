@@ -1,7 +1,7 @@
 [workspace]
 members = [
   "app/simulation-wasm",
-  "boid/neural-network",
-  "boid/genetic-algorithm",
-  "boid/simulation"
+  "shorelark/neural-network",
+  "shorelark/genetic-algorithm",
+  "shorelark/simulation"
 ]

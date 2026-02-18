@@ -1,5 +1,5 @@
 [package]
-name = "boid-simulation"
+name = "shorelark-simulation"
 version = "0.1.0"
 edition = "2024"
 

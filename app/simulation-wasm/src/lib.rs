@@ -1,5 +1,5 @@
-use boid_simulation as sim;
 use rand::prelude::*;
+use shorelark_simulation as sim;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
