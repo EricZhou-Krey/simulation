@@ -1,36 +1,38 @@
 use crate::*;
+use genetic_algorithm::Chromosome;
+use neural_network::{LayerTopology, Network};
 
 #[derive(Debug)]
 pub struct Brain {
-    pub(crate) nn: nn::Network,
+    pub(crate) nn: Network,
 }
 
 impl Brain {
     pub fn random<R: RngCore>(rng: &mut R, eye: &Eye) -> Self {
         Self {
-            nn: nn::Network::random(rng, &Self::topology(eye)).unwrap(),
+            nn: Network::random(rng, &Self::topology(eye)).unwrap(),
         }
     }
 
-    pub(crate) fn as_chromosome(&self) -> ga::Chromosome {
+    pub(crate) fn as_chromosome(&self) -> Chromosome {
         self.nn.weights().collect()
     }
 
-    pub(crate) fn from_chromosome(chromosome: ga::Chromosome, eye: &Eye) -> Self {
+    pub(crate) fn from_chromosome(chromosome: Chromosome, eye: &Eye) -> Self {
         Self {
-            nn: nn::Network::from_weights(&Self::topology(eye), chromosome),
+            nn: Network::from_weights(&Self::topology(eye), chromosome),
         }
     }
 
-    fn topology(eye: &Eye) -> [nn::LayerTopology; 3] {
+    fn topology(eye: &Eye) -> [LayerTopology; 3] {
         [
-            nn::LayerTopology {
+            LayerTopology {
                 neurons: eye.cells(),
             },
-            nn::LayerTopology {
+            LayerTopology {
                 neurons: 2 * eye.cells(),
             },
-            nn::LayerTopology { neurons: 2 },
+            LayerTopology { neurons: 2 },
         ]
     }
 }

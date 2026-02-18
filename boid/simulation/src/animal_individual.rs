@@ -1,6 +1,5 @@
 use crate::*;
-
-use ga::{Chromosome, Individual};
+use genetic_algorithm::{Chromosome, Individual};
 
 pub struct AnimalIndividual {
     fitness: f32,

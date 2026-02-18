@@ -1,8 +1,9 @@
 use crate::*;
+use nalgebra::Point2;
 
 #[derive(Debug)]
 pub struct Food {
-    pub(crate) position: na::Point2<f32>,
+    pub(crate) position: Point2<f32>,
 }
 
 impl Food {
@@ -12,7 +13,7 @@ impl Food {
         }
     }
 
-    pub fn position(&self) -> na::Point2<f32> {
+    pub fn position(&self) -> Point2<f32> {
         self.position
     }
 }

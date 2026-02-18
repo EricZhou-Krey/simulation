@@ -7,7 +7,7 @@ const ctxt = viewport.getContext("2d");
 ctxt.fillStyle = "rgb(0, 0, 0)";
 
 document.getElementById('train').onclick = function() {
-    simulation.train();
+    console.log(simulation.train());
 };
 
 const forward_scale = 1.5;
@@ -47,10 +47,11 @@ CanvasRenderingContext2D.prototype.drawCircle =
     this.fill();
   };
 
+const SIMULATION_SPEED = 3;
 function redraw() {
   ctxt.clearRect(0, 0, viewport.width, viewport.height);
 
-  for (let i = 0; i < 10; i += 1) {
+  for (let i = 0; i < SIMULATION_SPEED; i += 1) {
         simulation.step();
   }
   const world = simulation.world();

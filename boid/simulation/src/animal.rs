@@ -1,9 +1,11 @@
 use crate::*;
+use genetic_algorithm::Chromosome;
+use nalgebra::{Point2, Rotation2};
 
 #[derive(Debug)]
 pub struct Animal {
-    pub(crate) position: na::Point2<f32>,
-    pub(crate) rotation: na::Rotation2<f32>,
+    pub(crate) position: Point2<f32>,
+    pub(crate) rotation: Rotation2<f32>,
     pub(crate) speed: f32,
     pub(crate) eye: Eye,
     pub(crate) brain: Brain,
@@ -26,22 +28,22 @@ impl Animal {
         Self::new(eye, brain, rng)
     }
 
-    pub(crate) fn as_chromosome(&self) -> ga::Chromosome {
+    pub(crate) fn as_chromosome(&self) -> Chromosome {
         self.brain.as_chromosome()
     }
 
-    pub(crate) fn from_chromosome(chromosome: ga::Chromosome, rng: &mut dyn RngCore) -> Self {
+    pub(crate) fn from_chromosome(chromosome: Chromosome, rng: &mut dyn RngCore) -> Self {
         let eye = Eye::default();
         let brain = Brain::from_chromosome(chromosome, &eye);
 
         Self::new(eye, brain, rng)
     }
 
-    pub fn position(&self) -> na::Point2<f32> {
+    pub fn position(&self) -> Point2<f32> {
         self.position
     }
 
-    pub fn rotation(&self) -> na::Rotation2<f32> {
+    pub fn rotation(&self) -> Rotation2<f32> {
         self.rotation
     }
 }

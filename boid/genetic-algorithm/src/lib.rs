@@ -7,6 +7,40 @@ pub trait Individual {
     fn chromosome(&self) -> &Chromosome;
 }
 
+#[derive(Debug, Clone)]
+pub struct Statistics {
+    pub min_fitness: f32,
+    pub max_fitness: f32,
+    pub avg_fitness: f32,
+}
+
+impl Statistics {
+    fn new<I>(population: &[I]) -> Self
+    where
+        I: Individual,
+    {
+        assert!(!population.is_empty());
+
+        let mut min_fitness = population[0].fitness();
+        let mut max_fitness = min_fitness;
+        let mut sum_fitness = 0.0;
+
+        for individual in population {
+            let fitness = individual.fitness();
+
+            min_fitness = min_fitness.min(fitness);
+            max_fitness = max_fitness.max(fitness);
+            sum_fitness += fitness;
+        }
+
+        Self {
+            min_fitness,
+            max_fitness,
+            avg_fitness: sum_fitness / (population.len() as f32),
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct GeneticAlgorithm<S, C, M> {
     selection_method: S,
@@ -26,11 +60,12 @@ impl<S: SelectionMethod, C: CrossoverMethod, M: MutationMethod> GeneticAlgorithm
         &self,
         rng: &mut R,
         population: &[I],
-    ) -> Result<Vec<I>, String> {
+    ) -> Result<(Vec<I>, Statistics), String> {
         if population.is_empty() {
             return Err("Cannot evolve empty population".to_string());
         }
-        Ok((0..population.len())
+
+        let new_population = (0..population.len())
             .map(|_| {
                 let chromosome_a = self
                     .selection_method
@@ -52,7 +87,9 @@ impl<S: SelectionMethod, C: CrossoverMethod, M: MutationMethod> GeneticAlgorithm
 
                 I::create(cross_chromosome)
             })
-            .collect())
+            .collect();
+        let stats = Statistics::new(population);
+        Ok((new_population, stats))
     }
 }
 

@@ -1,4 +1,5 @@
 use crate::*;
+use nalgebra::{wrap, Point2, Rotation2, Vector2};
 use std::f32::consts::*;
 
 #[derive(Debug)]
@@ -26,8 +27,8 @@ impl Eye {
 
     pub fn process_vision(
         &self,
-        position: na::Point2<f32>,
-        rotation: na::Rotation2<f32>,
+        position: Point2<f32>,
+        rotation: Rotation2<f32>,
         foods: &[Food],
     ) -> Vec<f32> {
         let mut cells = vec![0.0; self.cells];
@@ -36,9 +37,8 @@ impl Eye {
             let to = food.position - position;
 
             let dist = to.norm();
-            let angle =
-                na::Rotation2::rotation_between(&na::Vector2::y(), &to).angle() - rotation.angle();
-            let angle = na::wrap(angle, -PI, PI);
+            let angle = Rotation2::rotation_between(&Vector2::y(), &to).angle() - rotation.angle();
+            let angle = wrap(angle, -PI, PI);
 
             if dist >= self.fov_range
                 || angle < -self.fov_angle / 2.0
@@ -93,8 +93,8 @@ mod tests {
             let eye = Eye::new(self.fov_range, self.fov_angle, TEST_EYE_CELLS);
 
             let actual_vision = eye.process_vision(
-                na::Point2::new(self.x, self.y),
-                na::Rotation2::new(self.rot),
+                Point2::new(self.x, self.y),
+                Rotation2::new(self.rot),
                 &self.foods,
             );
 
@@ -116,7 +116,7 @@ mod tests {
 
     fn food(x: f32, y: f32) -> Food {
         Food {
-            position: na::Point2::new(x, y),
+            position: Point2::new(x, y),
         }
     }
     #[test_case(1.0, "      +      ")]

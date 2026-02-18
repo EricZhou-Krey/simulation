@@ -1,5 +1,8 @@
 use crate::*;
-use ga::{GaussianMutation, GeneticAlgorithm, RouletteWheelSelection, UniformCrossover};
+use genetic_algorithm::{
+    GaussianMutation, GeneticAlgorithm, RouletteWheelSelection, Statistics, UniformCrossover,
+};
+use nalgebra::{distance, wrap, Rotation2, Vector2};
 
 const GENERATION_LENGTH: usize = 2500;
 
@@ -31,24 +34,23 @@ impl Simulation {
         &self.world
     }
 
-    pub fn step<R: RngCore>(&mut self, rng: &mut R) -> bool {
+    pub fn step<R: RngCore>(&mut self, rng: &mut R) -> Option<Statistics> {
         self.process_collisions(rng);
         self.process_brain();
         self.process_movements();
 
         self.age += 1;
         if self.age > GENERATION_LENGTH {
-            self.evolve(rng);
-            true
+            Some(self.evolve(rng))
         } else {
-            false
+            None
         }
     }
 
-    pub fn train<R: RngCore>(&mut self, rng: &mut R) {
+    pub fn train<R: RngCore>(&mut self, rng: &mut R) -> Statistics {
         loop {
-            if self.step(rng) {
-                return;
+            if let Some(summary) = self.step(rng) {
+                return summary;
             }
         }
     }
@@ -56,7 +58,7 @@ impl Simulation {
     fn process_collisions<R: RngCore>(&mut self, rng: &mut R) {
         for animal in &mut self.world.animals {
             for food in &mut self.world.foods {
-                let distance = na::distance(&animal.position, &food.position);
+                let distance = distance(&animal.position, &food.position);
 
                 if distance <= 0.01 {
                     animal.satiation += 1;
@@ -78,20 +80,20 @@ impl Simulation {
             let rotation = response[1].clamp(-ROTATION_ACCEL, ROTATION_ACCEL);
 
             animal.speed = (animal.speed + speed).clamp(SPEED_MIN, SPEED_MAX);
-            animal.rotation = na::Rotation2::new(animal.rotation.angle() + rotation);
+            animal.rotation = Rotation2::new(animal.rotation.angle() + rotation);
         }
     }
 
     fn process_movements(&mut self) {
         for animal in &mut self.world.animals {
-            animal.position += animal.rotation * na::Vector2::new(0.0, animal.speed);
+            animal.position += animal.rotation * Vector2::new(0.0, animal.speed);
 
-            animal.position.x = na::wrap(animal.position.x, 0.0, 1.0);
-            animal.position.y = na::wrap(animal.position.y, 0.0, 1.0);
+            animal.position.x = wrap(animal.position.x, 0.0, 1.0);
+            animal.position.y = wrap(animal.position.y, 0.0, 1.0);
         }
     }
 
-    fn evolve<R: RngCore>(&mut self, rng: &mut R) {
+    fn evolve<R: RngCore>(&mut self, rng: &mut R) -> Statistics {
         self.age = 0;
 
         let current_population: Vec<_> = self
@@ -101,7 +103,7 @@ impl Simulation {
             .map(AnimalIndividual::from_animal)
             .collect();
 
-        let evolved_population = self.ga.evolve(rng, &current_population).unwrap();
+        let (evolved_population, stats) = self.ga.evolve(rng, &current_population).unwrap();
 
         self.world.animals = evolved_population
             .into_iter()
@@ -111,5 +113,6 @@ impl Simulation {
         for food in &mut self.world.foods {
             food.position = rng.random();
         }
+        stats
     }
 }
