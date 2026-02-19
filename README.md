@@ -1,5 +1,9 @@
 # 🧬 Shorelark: Evolution Simulation in Rust
 
+[![Live Demo](https://img.shields.io/badge/demo-live-brightgreen)](https://EricZhou-Krey.github.io/simulation/)
+
+> **🌐 Live Simulation:** [https://EricZhou-Krey.github.io/simulation/](https://EricZhou-Krey.github.io/simulation/)
+
 A neural-network-driven evolution simulation where "birds" learn to navigate and gather food. This project was built while following the **[Learning to Fly in Rust](https://pwy.io/en/posts/learning-to-fly-pt1/)** tutorial series to explore systems programming, WebAssembly, and AI.
 
 ---
